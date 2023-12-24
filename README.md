@@ -1,6 +1,6 @@
 This is a reactjs project bootstrapped with `create vite` => `javaScript`
 
-# Todo project - redux tutorials
+# Todos project - redux tutorials
 
 This project is implemented from redux tutorials in section [Redux-Fundamentals](https://redux.js.org/tutorials/fundamentals/part-3-state-actions-reducers).
 
