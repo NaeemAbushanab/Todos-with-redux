@@ -1,0 +1,8 @@
+input::placeholder {
+  color: rgba(255, 255, 255, 0.329) !important;
+}
+input:focus {
+  color: white !important;
+  border: white 1px solid !important;
+  box-shadow: unset !important;
+}
