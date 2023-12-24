@@ -9,15 +9,15 @@ This project is implemented from redux tutorials in section [Redux-Fundamentals]
 - first section, you can type anythink in todo input, change status (isCompleted) and change color.
 - second section, you make filtering your data (todos inputs).
 
-## packages used:
+## Packages used:
 
 - redux
 - react-redux
 - bootstrap
 
-## run project:
+## Run project:
 
 - npm install
 - npm run dev
 
-[LiveView]
+`LiveView` : [https://todos-with-redux.onrender.com/](https://todos-with-redux.onrender.com/)
