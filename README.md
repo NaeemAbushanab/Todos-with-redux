@@ -20,4 +20,4 @@ This project is implemented from redux tutorials in section [Redux-Fundamentals]
 - npm install
 - npm run dev
 
-## `LiveView` : [https://todos-with-redux.onrender.com/](https://todos-with-redux.onrender.com/)
+`LiveView` : [https://todos-with-redux.onrender.com/](https://todos-with-redux.onrender.com/)
