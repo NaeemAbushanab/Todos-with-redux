@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 const initialValue = {
     status: "all",
-    colors: ["red"]
+    colors: []
 }
 function filtersSlice(state = initialValue, action) {
     let filters;

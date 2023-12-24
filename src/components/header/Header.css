@@ -6,3 +6,7 @@ input:focus {
   border: white 1px solid !important;
   box-shadow: unset !important;
 }
+.Todos {
+  height: 40vh;
+  overflow-y: scroll;
+}

@@ -15,24 +15,28 @@ function Header() {
     dispatch(todoAdded(todoInput));
   };
   return (
-    <div className="container mt-5">
-      <form className="px-5" onSubmit={handleOnSubmitTodoInput}>
-        <input
-          type="text"
-          name="text"
-          id="todoInput"
-          placeholder="type anything"
-          className="form-control rounded-pill bg-dark text-white p-3"
-          value={todoInput}
-          onChange={handleOnChnageTodoInput}
-        />
-      </form>
-      <div className="mt-5 pb-5">
-        {todosId.map((todoId, i) => (
-          <Todos id={todoId} key={i} />
-        ))}
+    <>
+      <div className="container mt-5">
+        <form className="px-5" onSubmit={handleOnSubmitTodoInput}>
+          <input
+            type="text"
+            name="text"
+            id="todoInput"
+            placeholder="type anything"
+            className="form-control rounded-pill bg-dark text-white p-3"
+            value={todoInput}
+            onChange={handleOnChnageTodoInput}
+          />
+        </form>
       </div>
-    </div>
+      <div className="Todos">
+        <div className="mt-5 pb-5 container">
+          {todosId.map((todoId, i) => (
+            <Todos id={todoId} key={i} />
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 

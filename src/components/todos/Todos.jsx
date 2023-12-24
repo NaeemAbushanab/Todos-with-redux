@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { todoColor, todoCompleted, todoRemove } from "../../features/todos/todosSlice";
 import { availableColors } from "../../consistent";
@@ -7,6 +7,12 @@ function Todos({ id }) {
   const { text, completed, color } = useSelector((state) =>
     state.todos.find((todoCurr) => id == todoCurr.id)
   );
+  const { colors, status } = useSelector((state) => state.filters);
+  if (status != "all") {
+    if (status == "active" && completed == true) return "";
+    else if (status == "completed" && completed == false) return "";
+  }
+  if (colors.length != 0 && !colors.includes(color)) return "";
   return (
     <div className="d-flex justify-content-between align-items-center border rounded-pill p-3 mb-3">
       <div className="d-flex align-items-center">
