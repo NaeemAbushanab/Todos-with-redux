@@ -17,21 +17,25 @@ const todosSlice = createSlice({
             todosFromApi.map(todo => {
                 state.entities[todo.id] = todo
             })
+            state.status = "idle"
         },
         _todoAdded(state, action) {
             const todo = action.payload
             state.entities[todo.id] = todo
+            state.status = "idle"
         },
         _todoToggle(state, action) {
             const todoId = action.payload
             const todo = state.entities[todoId]
             todo.completed = !todo.completed
+            state.status = "idle"
         },
         _todoColorSelected: {
             reducer(state, action) {
                 const { color, todoId } = action.payload
                 const todo = state.entities[todoId]
                 todo.color = color
+                state.status = "idle"
             },
             prepare(todoId, color) {
                 return { payload: { todoId, color } }
@@ -39,48 +43,53 @@ const todosSlice = createSlice({
         },
         _todoDeleted(state, action) {
             delete state.entities[action.payload]
+            state.status = "idle"
         },
         _todosMarkAllCompleted(state, action) {
             const newTodos = Object.values(state.entities)
             newTodos.map(todo => todo.completed = true)
+            state.status = "idle"
         },
         _todosClearCompleted(state, action) {
             const { entities } = state
             Object.values(state.entities).filter(todo => {
                 if (todo.completed == true) delete entities[todo.id]
             })
+            state.status = "idle"
         }
     }
 })
 // middleware functions
 const todosLoaded = (dispatch) => {
+    dispatch(todosSlice.actions._loadingScreen())
     axios.get("/api/todos").then(({ data }) => {
         dispatch(todosSlice.actions._todosLoaded(data))
     });
 }
 const todoAdded = (text) => (dispatch) => {
+    dispatch(todosSlice.actions._loadingScreen())
     axios.post("/api/todos/addTodo", text).then(({ data }) => dispatch(todosSlice.actions._todoAdded(data))
     )
 }
 const todoDeleted = (todoId) => (dispatch) => {
-    dispatch(todosSlice.actions._todoDeleted(todoId))
-    axios.patch('/api/todos/deleteTodo', todoId)
+    dispatch(todosSlice.actions._loadingScreen())
+    axios.patch('/api/todos/deleteTodo', todoId).then(() => dispatch(todosSlice.actions._todoDeleted(todoId)))
 }
 const todoToggle = (todoId) => (dispatch) => {
-    dispatch(todosSlice.actions._todoToggle(todoId))
-    axios.patch('/api/todos/todoToggle', todoId)
+    dispatch(todosSlice.actions._loadingScreen())
+    axios.patch('/api/todos/todoToggle', todoId).then(() => dispatch(todosSlice.actions._todoToggle(todoId)))
 }
 const todoColorSelected = (todoId, color) => (dispatch) => {
-    dispatch(todosSlice.actions._todoColorSelected(todoId, color))
-    axios.patch('/api/todos/todoColorSelected', { todoId, color })
+    dispatch(todosSlice.actions._loadingScreen())
+    axios.patch('/api/todos/todoColorSelected', { todoId, color }).then(() => dispatch(todosSlice.actions._todoColorSelected(todoId, color)))
 }
 const todosMarkAllCompleted = () => (dispatch) => {
-    dispatch(todosSlice.actions._todosMarkAllCompleted())
-    axios.patch("/api/todos/todosMarkAllCompleted")
+    dispatch(todosSlice.actions._loadingScreen())
+    axios.patch("/api/todos/todosMarkAllCompleted").then(() => dispatch(todosSlice.actions._todosMarkAllCompleted()))
 }
 const todosClearCompleted = () => (dispatch) => {
-    dispatch(todosSlice.actions._todosClearCompleted())
-    axios.patch("/api/todos/todosClearCompleted")
+    dispatch(todosSlice.actions._loadingScreen())
+    axios.patch("/api/todos/todosClearCompleted").then(() => dispatch(todosSlice.actions._todosClearCompleted()))
 
 }
 // reselect functions
@@ -97,7 +106,10 @@ const selectTodosIdWithFiltering = createSelector(
         if (filters.colors.length > 0) {
             resultTodos = resultTodos.filter(todo => filters.colors.includes(todo.color))
         }
-        return resultTodos.map(todo => todo.id)
+        return {
+            entities: resultTodos.map(todo => todo.id),
+            status: todos.status
+        }
     }
 
 )
