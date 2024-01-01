@@ -7,7 +7,6 @@ import Loading from "react-loading";
 function Header() {
   const [todoInput, setTodoInput] = useState("");
   const { entities, status } = useSelector(selectTodosIdWithFiltering);
-  console.log(status);
   const dispatch = useDispatch();
   const handleOnChnageTodoInput = (e) => {
     setTodoInput(e.target.value);
