@@ -1,14 +1,11 @@
-import { combineReducers, createStore } from "redux";
 import todosSlice from "../features/todos/todosSlice";
 import filtersSlice from "../features/filters/filtersSlice";
-
-const preloadedState = {
-    todos: JSON.parse(localStorage.getItem('todos')),
-}
-const store = createStore(
-    combineReducers({
+import '../api/server/server'
+import { configureStore } from "@reduxjs/toolkit";
+const store = configureStore({
+    reducer: {
         todos: todosSlice,
         filters: filtersSlice
-    }), preloadedState
-)
+    }
+})
 export default store

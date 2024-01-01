@@ -1,15 +1,23 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { todosMarkAllCompleted, todosClearCompleted } from "../../features/todos/todosSlice";
 import { availableColors } from "../../consistent";
-import { filtersByColors, filtersByStatus } from "../../features/filters/filtersSlice";
+import {
+  colorsFilterChanged,
+  statusFilterChanged,
+  statusFilters,
+} from "../../features/filters/filtersSlice";
+import {
+  selectRemainingTodos,
+  todosClearCompleted,
+  todosMarkAllCompleted,
+} from "../../features/todos/todosSlice";
 function Footer() {
   const dispatch = useDispatch();
-  const todos = useSelector((state) => state.todos);
+  const remainingTodoLength = useSelector(selectRemainingTodos);
   const filters = useSelector((state) => state.filters);
   const handleOnClickCheckBoxColors = (e) => {
-    if (e.target.checked) dispatch(filtersByColors(e.target.name, "add"));
-    else dispatch(filtersByColors(e.target.name, "remove"));
+    if (e.target.checked) dispatch(colorsFilterChanged(e.target.name, "add"));
+    else dispatch(colorsFilterChanged(e.target.name, "remove"));
   };
   return (
     <div className="mt-5 border-0 border-top position-relative text-white">
@@ -36,26 +44,32 @@ function Footer() {
           <div>
             <h3 className="fs-4">Remaining Todos</h3>
             <span>
-              {todos.length} item{todos.length > 1 ? "s" : ""} left
+              {remainingTodoLength} item{remainingTodoLength > 1 ? "s" : ""} left
             </span>
           </div>
           <div className="d-flex flex-column row-gap-3">
             <h3 className="fs-4">Filter by Status</h3>
             <button
-              className={`btn ${filters.status == "all" ? "btn-secondary" : "btn-primary"}`}
-              onClick={() => dispatch(filtersByStatus("all"))}
+              className={`btn ${
+                filters.status == statusFilters.All ? "btn-secondary" : "btn-primary"
+              }`}
+              onClick={() => dispatch(statusFilterChanged(statusFilters.All))}
             >
               All
             </button>
             <button
-              className={`btn ${filters.status == "active" ? "btn-secondary" : "btn-primary"}`}
-              onClick={() => dispatch(filtersByStatus("active"))}
+              className={`btn ${
+                filters.status == statusFilters.Active ? "btn-secondary" : "btn-primary"
+              }`}
+              onClick={() => dispatch(statusFilterChanged(statusFilters.Active))}
             >
               Active
             </button>
             <button
-              className={`btn ${filters.status == "completed" ? "btn-secondary" : "btn-primary"}`}
-              onClick={() => dispatch(filtersByStatus("completed"))}
+              className={`btn ${
+                filters.status == statusFilters.Completed ? "btn-secondary" : "btn-primary"
+              }`}
+              onClick={() => dispatch(statusFilterChanged(statusFilters.Completed))}
             >
               Completed
             </button>

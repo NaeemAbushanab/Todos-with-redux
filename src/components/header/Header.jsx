@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "./Header.css";
 import Todos from "../todos/Todos";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { todoAdded } from "../../features/todos/todosSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectTodosIdWithFiltering, todoAdded } from "../../features/todos/todosSlice";
 function Header() {
   const [todoInput, setTodoInput] = useState("");
-  const todosId = useSelector((state) => state.todos.map((todo) => todo.id), shallowEqual);
+  const todosId = useSelector(selectTodosIdWithFiltering);
   const dispatch = useDispatch();
   const handleOnChnageTodoInput = (e) => {
     setTodoInput(e.target.value);
@@ -13,6 +13,7 @@ function Header() {
   const handleOnSubmitTodoInput = (e) => {
     e.preventDefault();
     dispatch(todoAdded(todoInput));
+    setTodoInput("");
   };
   return (
     <>

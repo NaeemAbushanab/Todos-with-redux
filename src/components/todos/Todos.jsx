@@ -1,18 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { todoColor, todoCompleted, todoRemove } from "../../features/todos/todosSlice";
 import { availableColors } from "../../consistent";
+import { todoColorSelected, todoDeleted, todoToggle } from "../../features/todos/todosSlice";
 function Todos({ id }) {
   const dispatch = useDispatch();
-  const { text, completed, color } = useSelector((state) =>
-    state.todos.find((todoCurr) => id == todoCurr.id)
-  );
-  const { colors, status } = useSelector((state) => state.filters);
-  if (status != "all") {
-    if (status == "active" && completed == true) return "";
-    else if (status == "completed" && completed == false) return "";
-  }
-  if (colors.length != 0 && !colors.includes(color)) return "";
+  const { text, completed, color } = useSelector((state) => state.todos.entities[id]);
   return (
     <div className="d-flex justify-content-between align-items-center border rounded-pill p-3 mb-3">
       <div className="d-flex align-items-center">
@@ -22,7 +14,7 @@ function Todos({ id }) {
           id="isCom"
           className="me-3"
           checked={completed}
-          onChange={() => dispatch(todoCompleted(id))}
+          onChange={() => dispatch(todoToggle(id))}
         />
         <h2 className="p-0 m-0 d-inline text-white fs-4 ">{text}</h2>
       </div>
@@ -30,10 +22,10 @@ function Todos({ id }) {
         <select
           name="color"
           id="color"
-          defaultValue={color}
-          onChange={(e) => dispatch(todoColor(id, e.target.value))}
+          value={color}
+          onChange={(e) => dispatch(todoColorSelected(id, e.target.value))}
           className="ps-2 fs-5 rounded-pill text-center"
-          style={{ color: `${color == "" ? "white" : color}` }}
+          style={{ color: color == "" ? "white" : color }}
         >
           <option hidden>Select an Color</option>
           {availableColors.map((_color, i) => {
@@ -51,7 +43,7 @@ function Todos({ id }) {
             );
           })}
         </select>
-        <span className="ms-3 pb-1" onClick={() => dispatch(todoRemove(id))}>
+        <span className="ms-3 pb-1" onClick={() => dispatch(todoDeleted(id))}>
           <svg xmlns="http://www.w3.org/2000/svg" height="16" width="12" viewBox="0 0 384 512">
             <path
               fill="#ffffff"
